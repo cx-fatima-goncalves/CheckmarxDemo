@@ -20,6 +20,9 @@ namespace SQLi_1
                 var pass = "1234";
                 var pass2 = "1234";
                 pass2 = "12341!.Aa";
+                                pass2 = "12341!.Aa";
+                                pass2 = "12341!.Aa";
+                                pass2 = "12341!.Aa";
             }
             catch  
             {
@@ -58,5 +61,6 @@ namespace SQLi_1
         }
     }
 }
+
 
 

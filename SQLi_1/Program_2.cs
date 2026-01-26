@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("SQLi_1.Tests")]
 
 namespace SQLi_1
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -31,27 +34,33 @@ namespace SQLi_1
             return plain;
         }
 
+        internal static SqlCommand CreateLoginCommand(string username, string password, SqlConnection conn)
+        {
+            // Use parameterized query to prevent SQL injection
+            var sql = "SELECT * FROM Users WHERE username = @username AND pwd = @password";
+            var cmd = new SqlCommand(sql, conn);
+            // Add parameters to prevent SQL injection attacks
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@password", password);
+            return cmd;
+        }
+
         private static void Login(string username,string password)
         {
             try
             {
                 using (var conn = new SqlConnection("conn..."))
                 {
-                    var sql = "SELECT * FROM Users WHERE username = '" + username + "' AND pwd = '" + password + "'";
-                    using (var cmd = new SqlCommand(sql))
+                    using (var cmd = CreateLoginCommand(username, password, conn))
                     {
-                        cmd.Connection = conn;
                         cmd.ExecuteScalar();
                     }
-
                 }
             }
-            catch  
+            catch
             {
-
                 Console.WriteLine("An error has occurred !!");
             }
-           
         }
     }
 }

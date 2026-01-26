@@ -28,6 +28,7 @@ namespace SQLi_1
 
         private static  string Encrypt(string plain)
         {
+            var pwd = "!1Qa2ws3ed.";
             return plain;
         }
 
